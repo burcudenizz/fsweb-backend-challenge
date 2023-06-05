@@ -22,4 +22,17 @@ const sinirli = (req, res, next) => {
   }
 };
 
-module.exports = { sinirli };
+const checkPayload = (req, res, next) => {
+  try {
+    let { owner_id, owner_name, body } = req.body;
+    if (!owner_id || !owner_name || !body) {
+      res.status(400).json({ messsage: "Girdiğiniz alanları kontrol ediniz!" });
+    } else {
+      next();
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { sinirli, checkPayload };

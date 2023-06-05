@@ -20,7 +20,7 @@ router.get("/:owner_id", tweetMw.sinirli, (req, res, next) => {
     .catch(next);
 });
 
-router.post("/post", async (req, res, next) => {
+router.post("/post",tweetMw.checkPayload, async (req, res, next) => {
   try {
     let modelTweet = {
       owner_id: req.body.owner_id,
