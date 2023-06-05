@@ -20,4 +20,20 @@ router.get("/:owner_id", tweetMw.sinirli, (req, res, next) => {
     .catch(next);
 });
 
+router.post("/post", async (req, res, next) => {
+  try {
+    let modelTweet = {
+      owner_id: req.body.owner_id,
+      owner_name: req.body.owner_name,
+      body: req.body.body,
+      img_url: req.body.img_url,
+    };
+
+    const insertedTweet = await tweetModel.createTweet(modelTweet);
+    res.status(201).json(insertedTweet);
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = router;

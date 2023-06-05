@@ -7,6 +7,8 @@ const tweetModel = require("../tweets/tweets-model");
 
 router.post(
   "/register",
+  authMw.checkPayload,
+  authMw.checkDuplicateEmail,
   async (req, res, next) => {
     try {
       let hashedPassword = bcrypt.hashSync(req.body.password);
@@ -24,24 +26,27 @@ router.post(
   }
 );
 
-router.post("/login",
-authMw.checkPayload,
-authMw.usernameVarmi, async (req, res, next) => {
-  try {
-    let payload = {
-      owner_name: req.currentUser.owner_name,
-      email: req.currentUser.email,
-      subject: req.currentUser.owner_id,
-    };
+router.post(
+  "/login",
+  authMw.checkPayload,
+  authMw.isUserExist,
+  async (req, res, next) => {
+    try {
+      let payload = {
+        owner_name: req.currentUser.owner_name,
+        email: req.currentUser.email,
+        subject: req.currentUser.owner_id,
+      };
 
-    const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "1d" });
-    res.status(200).json({
-      message: `${req.currentUser.owner_name} geri geldi`,
-      token: token,
-    });
-  } catch (error) {
-    next(error);
+      const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "1d" });
+      res.status(200).json({
+        message: `${req.currentUser.owner_name} geri geldi`,
+        token: token,
+      });
+    } catch (error) {
+      next(error);
+    }
   }
-});
+);
 
 module.exports = router;

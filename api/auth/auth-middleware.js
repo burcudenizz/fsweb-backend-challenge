@@ -1,7 +1,8 @@
 const tweetModel = require("../tweets/tweets-model.js");
 const bcrypt = require("bcryptjs");
+const db = require("../../data/db-config.js");
 
-const usernameVarmi = async (req, res, next) => {
+const isUserExist = async (req, res, next) => {
   try {
     let isExist = await tweetModel.getUserById(req.body.owner_id);
     if (isExist && isExist.length > 0) {
@@ -12,7 +13,7 @@ const usernameVarmi = async (req, res, next) => {
       );
       if (!isPasswordMatch) {
         res.status(401).json({
-          message: "Geçersiz kriter",
+          message: "Parola veya email hatalı..",
         });
       } else {
         req.currentUser = currentUser;
@@ -28,11 +29,25 @@ const usernameVarmi = async (req, res, next) => {
   }
 };
 
+const checkDuplicateEmail = async (req, res, next) => {
+  const { email } = req.body;
+
+  try {
+    const existingUser = await db("users").where({ email }).first();
+    if (existingUser) {
+      return res.status(409).json({ error: "Bu email zaten kullanılıyor." });
+    }
+    next();
+  } catch (error) {
+    next(error);
+  }
+};
+
 const checkPayload = (req, res, next) => {
   try {
-    let { email, password } = req.body;
-    if (!email || !password) {
-      res.status(400).json({ messsage: "Eksik alan var" });
+    let { owner_name, email, password } = req.body;
+    if (!owner_name || !email || !password) {
+      res.status(400).json({ messsage: "Girdiğiniz alanları kontrol ediniz!" });
     } else {
       next();
     }
@@ -42,6 +57,7 @@ const checkPayload = (req, res, next) => {
 };
 
 module.exports = {
-  usernameVarmi,
+  isUserExist,
   checkPayload,
+  checkDuplicateEmail,
 };
