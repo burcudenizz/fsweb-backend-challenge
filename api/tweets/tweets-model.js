@@ -35,11 +35,16 @@ function getUserById(owner_id) {
   return db("users").where("owner_id", owner_id);
 }
 
+async function getUserByEmail(filtre) {
+  return db("users").select().where("email", filtre);
+}
+
 module.exports = {
   getAllTweets,
   getTweetsById,
   createTweet,
   removeTweet,
   createUser,
-  getUserById
+  getUserById,
+  getUserByEmail,
 };

@@ -4,7 +4,7 @@ const db = require("../../data/db-config.js");
 
 const isUserExist = async (req, res, next) => {
   try {
-    let isExist = await tweetModel.getUserById(req.body.owner_id);
+    let isExist = await tweetModel.getUserByEmail(req.body.email);
     if (isExist && isExist.length > 0) {
       let currentUser = isExist[0];
       let isPasswordMatch = bcrypt.compareSync(
@@ -45,8 +45,8 @@ const checkDuplicateEmail = async (req, res, next) => {
 
 const checkPayload = (req, res, next) => {
   try {
-    let { owner_name, email, password } = req.body;
-    if (!owner_name || !email || !password) {
+    let {  email, password } = req.body;
+    if ( !email || !password) {
       res.status(400).json({ messsage: "Girdiğiniz alanları kontrol ediniz!" });
     } else {
       next();
