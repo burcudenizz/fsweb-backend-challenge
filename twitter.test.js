@@ -48,19 +48,20 @@ describe("UserTestler", () => {
     expect(actual.body[0]).toHaveProperty("email", "burcuu@example.com");
   });
 
-  test("[2] Post(/register) ile kayıt olunuyor", async () => {
+  test("[2] Post(/register) ile kayıt olurken eksik alan olunca hata mesajı dönüyor mu?", async () => {
     //arrange
     const userData = {
       owner_name: "Polly",
       password: "123456",
     };
-
+    let expectedMessage = "Girdiğiniz alanları kontrol ediniz!";
     //act
     let actual = await request(server)
       .post("/api/auth/register")
       .send(userData);
 
     //assert
-    expect(actual.status).toBe(500);
+    expect(actual.status).toBe(400);
+    expect(actual.body[0][message]).toEqual(expectedMessage);
   });
 });

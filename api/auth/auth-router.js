@@ -4,7 +4,7 @@ const { JWT_SECRET } = require("../secrets");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const tweetModel = require("../tweets/tweets-model");
-
+const tweetMw = require("../tweets/tweets-middleware");
 router.post(
   "/register",
   authMw.checkPayload,
@@ -48,5 +48,15 @@ router.post(
     }
   }
 );
+
+router.get("/users", tweetMw.sinirli, async (req, res, next) => {
+  try {
+    const users = await tweetModel.getAllUsers();
+    res.json(users);
+  } catch (error) {
+    next(error);
+  }
+});
+
 
 module.exports = router;

@@ -1,5 +1,7 @@
 const db = require("../../data/db-config");
 
+/*tweets */
+
 function getAllTweets() {
   return db("tweets");
 }
@@ -16,6 +18,12 @@ async function createTweet(tweet) {
 
 function removeTweet(id_tweet) {
   return db("tweets").where("id", Number(id_tweet)).del();
+}
+
+/*users */
+
+function getAllUsers() {
+  return db("users");
 }
 
 async function createUser({ owner_name, password, email }) {
@@ -47,4 +55,5 @@ module.exports = {
   createUser,
   getUserById,
   getUserByEmail,
+  getAllUsers,
 };

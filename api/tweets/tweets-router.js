@@ -20,7 +20,7 @@ router.get("/:owner_id", tweetMw.sinirli, async (req, res, next) => {
   }
 });
 
-router.post("/post", tweetMw.checkPayload, async (req, res, next) => {
+router.post("/post", tweetMw.checkTweetPayload, async (req, res, next) => {
   try {
     let modelTweet = {
       owner_id: req.body.owner_id,
@@ -35,5 +35,9 @@ router.post("/post", tweetMw.checkPayload, async (req, res, next) => {
     next(error);
   }
 });
+
+
+
+
 
 module.exports = router;
