@@ -2,25 +2,25 @@ const router = require("express").Router();
 const tweetModel = require("./tweets-model.js");
 const tweetMw = require("./tweets-middleware.js");
 
-router.get("/", tweetMw.sinirli, (req, res, next) => {
-  tweetModel
-    .getAllTweets()
-    .then((tweet) => {
-      res.json(tweet);
-    })
-    .catch(next);
+router.get("/", tweetMw.sinirli, async (req, res, next) => {
+  try {
+    const tweet = await tweetModel.getAllTweets();
+    res.json(tweet);
+  } catch (error) {
+    next(error);
+  }
 });
 
-router.get("/:owner_id", tweetMw.sinirli, (req, res, next) => {
-  tweetModel
-    .getTweetsById(req.params.owner_id)
-    .then((tweet) => {
-      res.json(tweet);
-    })
-    .catch(next);
+router.get("/:owner_id", tweetMw.sinirli, async (req, res, next) => {
+  try {
+    const tweet = await tweetModel.getTweetsById(req.params.owner_id);
+    res.json(tweet);
+  } catch (error) {
+    next(error);
+  }
 });
 
-router.post("/post",tweetMw.checkPayload, async (req, res, next) => {
+router.post("/post", tweetMw.checkPayload, async (req, res, next) => {
   try {
     let modelTweet = {
       owner_id: req.body.owner_id,
