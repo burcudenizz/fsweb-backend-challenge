@@ -45,9 +45,9 @@ const checkDuplicateEmail = async (req, res, next) => {
 
 const checkPayload = (req, res, next) => {
   try {
-    let {  email, password } = req.body;
-    if ( !email || !password) {
-      res.status(400).json({ messsage: "Girdiğiniz alanları kontrol ediniz!" });
+    let { email, password } = req.body;
+    if (!email || !password) {
+      res.status(400).json({ message: "Girdiğiniz alanları kontrol ediniz!" });
     } else {
       next();
     }

@@ -32,9 +32,9 @@ describe("UserTestler", () => {
   test("[1]Post(/register) ile kayıt olunuyor mu?", async () => {
     //arrange
     const userData = {
-      owner_name: "Burcudeniz",
+      owner_name: "guns and roses",
       password: "123456",
-      email: "burcuu@example.com",
+      email: "gunsandroses@example.com",
     };
 
     //act
@@ -44,17 +44,17 @@ describe("UserTestler", () => {
 
     //assert
     expect(actual.status).toBe(201);
-    expect(actual.body[0]).toHaveProperty("owner_name", "Burcudeniz");
-    expect(actual.body[0]).toHaveProperty("email", "burcuu@example.com");
+    expect(actual.body[0]).toHaveProperty("owner_name", "guns and roses");
+    expect(actual.body[0]).toHaveProperty("email", "gunsandroses@example.com");
   });
 
   test("[2] Post(/register) ile kayıt olurken eksik alan olunca hata mesajı dönüyor mu?", async () => {
     //arrange
     const userData = {
-      owner_name: "Polly",
       password: "123456",
     };
     let expectedMessage = "Girdiğiniz alanları kontrol ediniz!";
+
     //act
     let actual = await request(server)
       .post("/api/auth/register")
@@ -62,6 +62,28 @@ describe("UserTestler", () => {
 
     //assert
     expect(actual.status).toBe(400);
-    expect(actual.body[0][message]).toEqual(expectedMessage);
+    expect(actual.body.message).toEqual(expectedMessage);
+  });
+
+  test("[3] Post(/login) ile yanlış bilgiler girildiğinde hata mesajı dönüyor mu?", async () => {
+    //arrange
+    const userData = {
+      password: "123456",
+      email: "gunsandroses@example.com",
+    };
+
+    //act
+    let actual = await request(server).post("/api/auth/login").send(userData);
+
+    //assert
+    expect(actual.status).toBe(401);
+  });
+
+  test("[4] Get(/users) ile kayıtlı kullanıcılar geliyor mu", async () => {
+    //act
+    let actual = await request(server).get("/api/auth/users");
+
+    //assert
+    expect(actual.body.length).toBe(3);
   });
 });
