@@ -29,8 +29,8 @@ describe("UserTestler", () => {
 
     //assert
     expect(actual.status).toBe(201);
-    expect(actual.body[0]).toHaveProperty("owner_name", "guns and roses");
-    expect(actual.body[0]).toHaveProperty("email", "gunsandroses@example.com");
+    expect(actual.body).toHaveProperty("owner_name", "guns and roses");
+    expect(actual.body).toHaveProperty("email", "gunsandroses@example.com");
   });
 
   test("[2] Post(/register) ile kayıt olurken eksik alan olunca hata mesajı dönüyor mu?", async () => {
@@ -104,5 +104,22 @@ describe("Tweets testleri", () => {
     // Assert
     expect(response.status).toBe(200);
     expect(response.body.length).toBeGreaterThan(0);
+  });
+
+  test("[6] Post(/tweets/post) ile yeni bir tweet ekleniyor mu?", async () => {
+    const tweetPayload = {
+      owner_name: "guns and roses",
+      body: "Rock this tweet ! ",
+      owner_id: "4",
+      img_url: "https://cdn-icons-png.flaticon.com/512/236/236832.png",
+    };
+
+    let actual = await request(server)
+      .post("/api/tweets/post")
+      .send(tweetPayload);
+
+    // İsteğin döndürdüğü yanıtın kontrolü
+    expect(actual.status).toBe(201);
+    expect(actual.body).toHaveProperty("body", "Rock this tweet ! ");
   });
 });
