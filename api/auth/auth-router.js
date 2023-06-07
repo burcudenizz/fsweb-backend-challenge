@@ -71,4 +71,19 @@ router.post("/logout", tweetMw.sinirli, (req, res, next) => {
   }
 });
 
+router.get("/profile",tweetMw.sinirli, async (req,res,next)=>{
+
+  try {
+    
+const ownerId=req.decodedToken.owner_id;
+const user =await tweetModel.getUserById(ownerId);
+res.json(user);
+
+  } catch (error) {
+    next(error);
+  }
+})
+
+
+
 module.exports = router;
