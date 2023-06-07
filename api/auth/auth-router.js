@@ -35,7 +35,7 @@ router.post(
       let payload = {
         owner_name: req.currentUser.owner_name,
         email: req.currentUser.email,
-        subject: req.currentUser.owner_id,
+        id: req.currentUser.owner_id,
       };
 
       const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "1d" });
@@ -71,19 +71,15 @@ router.post("/logout", tweetMw.sinirli, (req, res, next) => {
   }
 });
 
-router.get("/profile",tweetMw.sinirli, async (req,res,next)=>{
-
+router.get("/profile", tweetMw.sinirli, async (req, res, next) => {
   try {
-    
-const ownerId=req.decodedToken.owner_id;
-const user =await tweetModel.getUserById(ownerId);
-res.json(user);
-
+    const ownerEmail = req.decodedToken.email;
+    const user = await tweetModel.getUserByEmail(ownerEmail);
+    res.json(user);
   } catch (error) {
     next(error);
   }
-})
-
+});
 
 
 module.exports = router;

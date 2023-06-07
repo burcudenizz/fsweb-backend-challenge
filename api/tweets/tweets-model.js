@@ -40,7 +40,7 @@ async function createUser({ owner_name, password, email }) {
 }
 
 function getUserById(owner_id) {
-  return db("users").where("owner_id", owner_id);
+  return db("users").where("owner_id", owner_id).first();
 }
 
 async function getUserByEmail(filtre) {
