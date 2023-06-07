@@ -58,5 +58,17 @@ router.get("/users", tweetMw.sinirli, async (req, res, next) => {
   }
 });
 
+router.post("/logout", tweetMw.sinirli, (req, res, next) => {
+  try {
+    const expirationTime = 1;
+    res.cookie("token", "", { expires: new Date(Date.now() - expirationTime) });
+    res.json({
+      message: "Çıkış yapıldı!",
+      logout: true,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
 
 module.exports = router;

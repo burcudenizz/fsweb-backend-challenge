@@ -16,4 +16,15 @@ server.use(function(req, res, next) {
 server.use("/api/auth", authRouter);
 server.use("/api/tweets", tweetsRouter);
 
+//4. Error middleware
+
+server.use((err,req,res,next)=>{
+  res.status(err.status || 500)
+      .json({
+          message: err.message || "Server Error!..."
+      })
+})
+
+
+
 module.exports = server;

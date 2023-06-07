@@ -26,11 +26,9 @@ const checkTweetPayload = (req, res, next) => {
   try {
     let { owner_id, owner_name, body } = req.body;
     if (!owner_id || !owner_name || !body) {
-      res
-        .status(400)
-        .json({
-          messsage: "Tweet atarken girdiğiniz alanları kontrol ediniz!",
-        });
+      res.status(400).json({
+        messsage: "Tweet atarken girdiğiniz alanları kontrol ediniz!",
+      });
     } else {
       next();
     }
