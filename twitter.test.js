@@ -107,6 +107,16 @@ describe("Tweets testleri", () => {
   });
 
   test("[6] Post(/tweets/post) ile yeni bir tweet ekleniyor mu?", async () => {
+    let loginPayload = {
+      password: "123456",
+      email: "gunsandroses@example.com",
+    };
+    let actual = await request(server)
+      .post("/api/auth/login")
+      .send(loginPayload);
+    expect(actual.status).toBe(200);
+  
+
     const tweetPayload = {
       owner_name: "guns and roses",
       body: "Rock this tweet ! ",
@@ -114,12 +124,12 @@ describe("Tweets testleri", () => {
       img_url: "https://cdn-icons-png.flaticon.com/512/236/236832.png",
     };
 
-    let actual = await request(server)
+    let actualTweet = await request(server)
       .post("/api/tweets/post")
       .send(tweetPayload);
 
     // İsteğin döndürdüğü yanıtın kontrolü
-    expect(actual.status).toBe(201);
-    expect(actual.body).toHaveProperty("body", "Rock this tweet ! ");
+    expect(actualTweet.status).toBe(201);
+    expect(actualTweet.body).toHaveProperty("body", "Rock this tweet ! ");
   });
 });

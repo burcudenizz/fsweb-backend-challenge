@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const tweetModel = require("./tweets-model.js");
 const tweetMw = require("./tweets-middleware.js");
+const { sign } = require("jsonwebtoken");
 
 router.get("/", tweetMw.sinirli, async (req, res, next) => {
   try {
@@ -20,7 +21,7 @@ router.get("/:owner_id", tweetMw.sinirli, async (req, res, next) => {
   }
 });
 
-router.post("/post", tweetMw.checkTweetPayload, async (req, res, next) => {
+router.post("/post", tweetMw.checkTweetPayload, tweetMw.sinirli,async (req, res, next) => {
   try {
     let modelTweet = {
       owner_id: req.body.owner_id,
